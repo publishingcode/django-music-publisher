@@ -1,9 +1,7 @@
 """Django app definition for :mod:`music_publisher`."""
 
 from django.apps import AppConfig
-
 from .validators import validate_settings
-import os
 
 
 class MusicPublisherConfig(AppConfig):
@@ -15,12 +13,11 @@ class MusicPublisherConfig(AppConfig):
         verbose_name (str): app verbose name
     """
 
-    name = "music_publisher"
-    label = "music_publisher"
-    verbose_name = "Music Publisher"
+    name = 'music_publisher'
+    label = 'music_publisher'
+    verbose_name = 'Music Publisher'
 
     def ready(self):
         """Validate settings when ready to prevent deployments with invalid
-        settings."""
-        if os.getenv("DATABASE_URL") != "":
-            validate_settings()
+        settings. """
+        validate_settings()

@@ -15,13 +15,11 @@ DMP
    :maxdepth: 1
 
    introduction
-   features
-   support
-   qa
-   videos
    installation
+   support
    releases
    LICENSE
    manual
    restapi
+   videos
    modules

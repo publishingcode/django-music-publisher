@@ -1,9 +1,6 @@
 Introduction
 =================================
 
-Music Metadata Management
-+++++++++++++++++++++++++++++++++
-
 **DMP** (Django-Music-Publisher) is free, open-source software for **managing music 
 metadata**:
 
@@ -12,113 +9,146 @@ metadata**:
 * releases/albums (with cover art), and
 * music libraries.
 
-.. mermaid::
-    :caption: Simplified Class Diagram
-    
-    classDiagram
-        direction BT
-        class Writer {
-            first name
-            last name
-            IPI
-            CMO aff.
-            ...
-        }
-        class Work {
-            title
-            ISWC
-            ...
-        }
-        class Recording {
-            recording title
-            version title
-            ISRC
-            ...
-        }
-        class Artist {
-            first name
-            last/band name
-            ISNI
-            ...
-        }
-        class GeneralAgreement {
-            publisher fee
-            ...
-        }
-        class WriterInWork {
-            role
-            manuscript share
-            controlled
-            ...
-        }
-        class Release {
-            title
-            date
-            ...
-        }
-        class Label {
-            name
-        }
-        class Library {
-            name
-        }
-        GeneralAgreement --> Writer
-        Writer <-- WriterInWork
-        WriterInWork --> Work
-        Label <-- Recording : Record Label
-        Recording --> Work
-        Recording --> Artist: Recording Artist
-        Artist <..> Work : Live Artist
-        Release <.. Work : Library Release
-        Release <--> Recording : Track
-        Release ..> Library : Library Release
-        Release --> Label : Release Label
-
-Common Works Registration (CWR)
-+++++++++++++++++++++++++++++++++
-
 It implements `CWR protocol <https://matijakolaric.com/articles/1/>`_
 for **batch registration of musical works** with Collective Management Organizations 
 (CMOs) and Digital Service Providers (DSPs).
 
-.. mermaid::
-    :caption: Sequence diagram: Work registration and incoming royalty statements
+Simple powerful **royalty management** can split received royalties among writers and 
+calculate fees.
 
-    sequenceDiagram
-        Note over Publisher,CMO: Registrations
-        Publisher->>CMO: CWR (Work Registration)
-        CMO->>Publisher: CWR ACK 1 (Technical validation)
-        CMO->>Publisher: CWR ACK 2 (Registration status + CMO work ID + ISWC)
-        Note over Publisher,CMO: Royalties
-        CMO->>Publisher: Royalty Statement (CMO work ID + royalty amount)
 
-Royalty Management
-+++++++++++++++++++++++++++++++++
 
-Simple **royalty management** calculations can split received royalties among controlled 
-writers and calculate publisher fees. 
+Community support
++++++++++++++++++++++++++++
 
-Incoming data is accepted
-as a CSV file. If registrations are done using CWR, 
-work matching is fully automatic. 
-Output is a similar CSV file with additional rows and columns.
+No individual support, of any kind, is provided for this free software. 
+See :doc:`support` for community support options.
 
-.. mermaid::
-    :caption: Sequence diagram: Processing incoming royalty statements
+Features and limitations
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    sequenceDiagram
-        CMO/DSP->>Publisher DMP: Incoming Royalty Statement (CSV)
-        Publisher DMP->>Publisher Excel: Augmented royalty information
-        Publisher Excel->>Writer: Outgoing Royalty Statement
-        Publisher Excel->>Accounting: Accounting data
+Key features and limitations of DMP are listed below. If you need more, 
+`That Green Thing <https://matijakolaric.com/thatgreenthing>`_, available as 
+affordable Software-as-a-Service, is the recommended solution.
 
-This file can be then imported into Excel and turned into individual
-outgoing statements and accounting data using pivot tables. This process
-can be automated using Excel templates and simple scripts.
+Music metadata management
+-------------------------
 
-Data Distribution
-++++++++++++++++++++++++++++++++++
+The database can store detailed metadata for musical works and recordings, 
+data about writers, recording and performing artists, releases (albums), 
+labels and music libraries, as well as CWR exports and acknowledgements.
 
-Besides the aforementioned CWR protocol, music metadata can be exported in 
-several other formats, or be accessed through the read-only 
-:doc:`REST API <restapi>`.
+Total data validation
+-------------------------
+
+All entered data is validated for CWR and DDEX compatibility on field-, record-,
+and transaction-level.
+
+Manuscript shares
+------------------------
+
+DMP uses a **single manuscript share** model, meaning that 
+manuscript share splits between writers are same for performance, mechanical and 
+synchronisation rights.
+
+Original publishing agreement data
+-----------------------------------------
+
+Basic **original publishing agreement** data can be entered, sufficient for 
+registrations in societies that require **society-assigned agreement numbers**.
+
+Share transfer
+-------------------------
+
+Share transfer from a controlled writer to the publisher can be configured, 
+in accordance with national regulations and customs. There is only a **single 
+setting for all controlled writers**.
+
+Publisher fees
+-------------------------
+
+Publisher fees are customisable per-writer, or even per-writer-per-work.
+
+No other publishers
+------------------------
+
+It does **not** manage data for **other publishers**. Non-controlled writers 
+appear as unpublished in CWR files. 
+
+Co-publishing
+------------------------
+
+**Co-publishing deals** are possible, with each publisher registering their own 
+shares. In this case, the other publisher appears as unknown in CWR files.
+
+No support for composite works
+--------------------------------
+
+Composite musical works, as well as recordings based on multiple musical works 
+(e.g. medleys), are not supported.
+
+Registrations
+-------------
+
+Registrations can be exported as **CWR** files. Supported versions are: 2.1, 2.2, 3.0, 
+and 3.1.
+
+Acknowledgement files in CWR format can be imported.
+
+**CWR preview** features syntax highlighting with additional data on mouse-over, 
+for both CWR files generated by DMP and imported acknowledgements.
+
+Defaults when creating CWR files
+---------------------------------------
+
+When creating CWR, many fields are left with blank/zero values. When the fields are 
+required in CWR, it uses reasonable defaults, e.g.:
+
+* *Musical Work Distribution* is set to *Unclassified*,
+* *Recorded indicator* is set to *Yes* or *Unknown*, depending if recording 
+  metadatawas entered, and
+* *Work for Hire*, *Grand Rights Indicator*, *Reversionary Indicator*, and *First 
+  Recording Refusal Indicator* are set to No.
+
+Royalty management
+--------------------
+
+**Incoming royalty statements** in CSV format can be processed, resulting in 
+CSV statements containing data for distribution between controlled interested 
+parties. Statement processing is extremely fast.
+
+Actual outgoing statements must be created in Excel using pivot tables. For
+experienced Excel user, this takes about 10 minutes for the first statement and
+then about 30 seconds per statement for all others.
+
+Data imports and exports
+------------------------
+
+Data about works can be imported from *CSV* files.
+
+Data for selected works can be exported as *JSON* (complete) or *CSV* (partial).
+
+Audio files and images
+------------------------
+
+If persistent file storage is available, images can be uploaded (photos for
+writers and artists, logos for labels, cover arts for releases), as well as
+audio files.
+
+Sharable playlists
+----------------------
+
+Playlists can be created and shared, protected only by secret URLs. [#f1]_
+
+REST API
+----------------------
+
+Read-only REST API, with basic HTTP authentication, is available. 
+It can be used for:
+
+* Complete data export
+* Metadata exchange
+* Content exchange [#f1]_ [#f2]_ 
+
+.. [#f1] Requires persistent file storage
+.. [#f2] Plugin exists for WordPress

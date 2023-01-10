@@ -23,8 +23,7 @@ Add View
    Add CWR export view
 
 .. note::
-    If *CWR delivery code* is not entered as ``PUBLISHER_CODE`` in :ref:`settings`, ``000`` will be
-    used. Such CWR files will not be accepted by most CMOs, but may be accepted by (sub-)publishers.
+    CWR exports can be created only if *CWR delivery code* is entered as ``PUBLISHER_CODE`` in :ref:`settings`.
 
 .. warning::
     Do NOT use an arbitratry CWR delivery code for creating CWR exports.
